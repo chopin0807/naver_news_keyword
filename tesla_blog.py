@@ -33,14 +33,26 @@ def get_blog(url):
     else:
         print("작성일시: ", date.text)
     content = soup_blog.select("span.se-fs-")
+    # 블로그별 구조의 차이에 따른 추가패턴 탐색
+    content_add1 = soup_blog.select("span.se-fs-19")
     content_list = []
     for i in content:
         content_list.append(i.text)
+    # 추가패턴 검색 시 내용추가 진행
+    content_add(soup_blog, "span.se-fs-19", content_list)
     content_result = ""
     for i in content_list:
         content_result += i
     print(content_result) # 원문
     print("============================================================================================")
+
+# 블로그별 구조의 차이에 따른 추가패턴 탐색에 대한 모델
+def content_add(soup, pattern, list_content): # soup: soup_blog사용, pattern: soup.select 표현식사용, list_content: content_list사용
+    add_content = soup.select(pattern)
+    # 추가패턴 검색 시 내용추가 진행
+    if add_content is not None:
+        for i in add_content:
+            list_content.append(i.text)
 
 naver_url = "https://search.naver.com/search.naver?where=blog&query=%ED%85%8C%EC%8A%AC%EB%9D%BC&sm=tab_opt&nso=so:dd,p:from20230921to20230922"
 res_naver = requests.get(naver_url)
