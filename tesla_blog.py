@@ -40,18 +40,18 @@ def get_blog(url):
     for i in content:
         content_list.append(i.text)
     # 추가패턴 검색 시 내용추가 진행
-    # content_add(soup_blog, "span.se-fs-19", content_list)
-    # content_add(soup_blog, "span.se-fs-fs30", content_list)
-    # content_add(soup_blog, "span.se-fs-fs24", content_list)
-    # print(re.findall("se[-_]fs.*", str(soup_blog.select_one("span"))))
+    content_add(soup_blog, "span.se-fs-19", content_list)
+    content_add(soup_blog, "span.se-fs-fs30", content_list)
+    content_add(soup_blog, "span.se-fs-fs24", content_list)
+    print(re.findall("se[-_]fs.*", str(soup_blog.select_one("span"))))
     for i in soup_blog.select("span"): # 태그 패턴이 "se-fsxxxxx또는 se_fsxxxxx패턴을 모두 찾아 content_add매소드 적용"
         find_pattern = re.findall("(?<=class=\")se[-_]fs.*", str(i))
         pattern_only = []   # 리스트 find_pattern에서의 중복 제거 후 리스트
-        for value in find_pattern:
-            if value not in pattern_only:
-                pattern_only.append(value)
-        if not len(pattern_only) == 0:
-            content_add(soup_blog, "span." + pattern_only[0].split(" ")[0], content_list)
+        # for value in find_pattern:
+        #     if value not in pattern_only:
+        #         pattern_only.append(value)
+        # if not len(pattern_only) == 0:
+        #     content_add(soup_blog, "span." + pattern_only[0].split(" ")[0], content_list)
 
     content_result = ""
     for i in content_list:
