@@ -15,7 +15,6 @@ def Tesla_keyword_page(p):
 
         title = soup.select("a.news_tit")
         naver_url = soup.select("div.info_group")
-
         for i in title:
             title_list.append(i.text)
         for i in naver_url:
