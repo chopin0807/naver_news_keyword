@@ -17,14 +17,18 @@ def get_blog(url):
     category = soup_blog.select_one("div.blog2_series > a.pcol2") # 카테고리
     category_list = []
     if category is None:
-        category_list.append("<카테고리경로가 다르거나 카테고리가 설정되지 않음")
+        category_list.append("<카테고리경로가 다르거나 카테고리가 설정되지 않음>")
     else:
         # print("카테고리: ", category.text)
         category_list.append(category.text)
     title = soup_blog.select_one("span.se-fs-") # 제목
     title_list = []
     if title is None:
-        title_list.append("<제목경로가 다르거나 제목 설정되지 않음>")
+        title_new = soup_blog.select_one("h3.se_textarea")
+        if title_new is None:
+            title_list.append("<제목경로가 다르거나 제목 설정되지 않음>")
+        else:
+            title_list.append(title_new.text)
     else:
         # print("제목: ", title.text)
         title_list.append(title.text)
@@ -35,7 +39,7 @@ def get_blog(url):
     else:
         # print("작성자: ", name.text)
         name_list.append(name.text)
-    date = soup_blog.select_one("span.se_publishDate") # 작성일시
+    date = soup_blog.select_one(".se_publishDate") # 작성일시
     date_list= []
     if date is None:
         date_list.append("<작성일지경로가 다르거나 작성일지 확인 불가능>")
