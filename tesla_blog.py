@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import pandas as pd
 
 def get_blog(url):
     URL = url
@@ -14,25 +15,33 @@ def get_blog(url):
     soup_blog = BeautifulSoup(res_blog.text, "html.parser")
 
     category = soup_blog.select_one("div.blog2_series > a.pcol2") # 카테고리
+    category_list = []
     if category is None:
-        print("이 블로그는 별도의 카테고리를 구분하지 않습니다.")
+        category_list.append("카테고리 구분 없음")
     else:
-        print("카테고리: ", category.text)
+        # print("카테고리: ", category.text)
+        category_list.append(category.text)
     title = soup_blog.select_one("span.se-fs-") # 제목
+    title_list = []
     if title is None:
-        print("이 블로그는 제목이 없습니다.")
+        title_list.append("제목이 설정되지 않음")
     else:
-        print("제목: ", title.text)
+        # print("제목: ", title.text)
+        title_list.append(title.text)
     name = soup_blog.select_one("span.nick > a.link") # 작성자
+    name_list = []
     if name is None:
-        print("이 블로그에 대한 작성자를 확인할 수 없습니다.")
+        name_list.append("작성자 확인 불가")
     else:
-        print("작성자: ", name.text)
+        # print("작성자: ", name.text)
+        name_list.append(name.text)
     date = soup_blog.select_one("span.se_publishDate") # 작성일시
+    date_list= []
     if date is None:
-        print("이 블로그에 대한 작성일시가 확인되지 않았습니다.")
+        date_list.append("작성일시 확인 불가")
     else:
-        print("작성일시: ", date.text)
+        # print("작성일시: ", date.text)
+        date_list.append(date.text)
     content = soup_blog.select("span.se-fs-")
     # 블로그별 구조의 차이에 따른 추가패턴 탐색
     content_add1 = soup_blog.select("span.se-fs-19")
@@ -55,8 +64,11 @@ def get_blog(url):
     content_result = ""
     for i in content_list:
         content_result += i
-    print(content_result) # 원문
-    print("============================================================================================")
+    # print(content_result) # 원문
+    # print("============================================================================================")
+
+    # dataframe형식으로 출력하기 위한 dataset
+    return category_list, title_list, name_list, date_list, content_list
 
 # 블로그별 구조의 차이에 따른 추가패턴 탐색에 대한 모델
 def content_add(soup, pattern, list_content): # soup: soup_blog사용, pattern: soup.select 표현식사용, list_content: content_list사용
@@ -79,5 +91,20 @@ blog_url_list = []
 for i in search_url:
     blog_url_list.append(i["href"])
 
+category_result = []
+title_result = []
+name_result = []
+date_result = []
+content_result = []
 for i in blog_url_list:
-    get_blog(i)
+    a, b, c, d, e = get_blog(i)
+    category_result.extend(a)
+    title_result.extend(b)
+    name_result.extend(c)
+    date_result.extend(d)
+    content_result.append(e)
+
+# dataframe 생성 및 출력
+data = {"카테고리": category_result, "제목": title_result, "작성자": name_result, "작성일시": date_result, "본문": content_result}
+df = pd.DataFrame(data)
+print(df)
