@@ -43,7 +43,6 @@ def get_blog(url):
     # content_add(soup_blog, "span.se-fs-19", content_list)
     # content_add(soup_blog, "span.se-fs-fs30", content_list)
     # content_add(soup_blog, "span.se-fs-fs24", content_list)
-    # print(re.findall("se[-_]fs.*", str(soup_blog.select_one("span"))))
     for i in soup_blog.select("span"): # 태그 패턴이 "se-fsxxxxx또는 se_fsxxxxx패턴을 모두 찾아 content_add매소드 적용"
         find_pattern = re.findall("(?<=class=\")se[-_]fs.*", str(i))
         pattern_only = []   # 리스트 find_pattern에서의 중복 제거 후 리스트
@@ -64,8 +63,13 @@ def content_add(soup, pattern, list_content): # soup: soup_blog사용, pattern: 
     add_content = soup.select(pattern)
     # 추가패턴 검색 시 내용추가 진행
     if add_content is not None:
+        add_content_only = []
         for i in add_content:
             list_content.append(i.text)
+        for value in list_content: # 리스트 add_content에 대한 중복 제거
+            if value not in add_content_only:
+                add_content_only.append(value)
+        list_content = add_content
 
 naver_url = "https://search.naver.com/search.naver?where=blog&query=%ED%85%8C%EC%8A%AC%EB%9D%BC&sm=tab_opt&nso=so:dd,p:from20230921to20230922"
 res_naver = requests.get(naver_url)
