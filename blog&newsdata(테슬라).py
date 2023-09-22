@@ -24,7 +24,7 @@ def Tesla_keyword_page(p):
                 naver_url_list.append("네이버 뉴스기사 URL없음")
     return title_list, naver_url_list
 
-title, url = Tesla_keyword_page(10)
+title, url = Tesla_keyword_page(9)
 for i in range(len(title)):
     print("기사제목: ", title[i])
     print("네이버 기사 URL: ", url[i])
