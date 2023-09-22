@@ -13,16 +13,25 @@ def get_blog(url):
     soup_blog = BeautifulSoup(res_blog.text, "html.parser")
 
     category = soup_blog.select_one("div.blog2_series > a.pcol2") # 카테고리
-    print("카테고리: ", category.text)
+    if category is None:
+        print("이 블로그는 별도의 카테고리를 구분하지 않습니다.")
+    else:
+        print("카테고리: ", category.text)
     title = soup_blog.select_one("span.se-fs-") # 제목
     if title is None:
         print("이 블로그는 제목이 없습니다.")
     else:
         print("제목: ", title.text)
     name = soup_blog.select_one("span.nick > a.link") # 작성자
-    print("작성자: ", name.text)
+    if name is None:
+        print("이 블로그에 대한 작성자를 확인할 수 없습니다.")
+    else:
+        print("작성자: ", name.text)
     date = soup_blog.select_one("span.se_publishDate") # 작성일시
-    print("작성일시: ", date.text)
+    if date is None:
+        print("이 블로그에 대한 작성일시가 확인되지 않았습니다.")
+    else:
+        print("작성일시: ", date.text)
     content = soup_blog.select("span.se-fs-")
     content_list = []
     for i in content:
