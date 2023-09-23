@@ -56,9 +56,9 @@ def get_blog(url):
     # content_add(soup_blog, "span.se-fs-19", content_list)
     # content_add(soup_blog, "span.se-fs-fs30", content_list)
     # content_add(soup_blog, "span.se-fs-fs24", content_list)
+    pattern_only = []   # 리스트 find_pattern에서의 중복 제거 후 리스트
     for i in soup_blog.select("span"): # 태그 패턴이 "se-fsxxxxx또는 se_fsxxxxx패턴을 모두 찾아 content_add매소드 적용"
         find_pattern = re.findall("(?<=class=\")se[-_]fs.*", str(i))
-        pattern_only = []   # 리스트 find_pattern에서의 중복 제거 후 리스트
         for value in find_pattern:
             if value not in pattern_only:
                 pattern_only.append(value)
