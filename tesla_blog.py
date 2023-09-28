@@ -48,7 +48,7 @@ def get_blog(url):
         date_list.append(date.text)
     content = soup_blog.select("span.se-fs-")
     # 블로그별 구조의 차이에 따른 추가패턴 탐색
-    content_add1 = soup_blog.select("span.se-fs-19")
+    content_add1 = soup_blog.select(".se-title-text > p > span")
     content_list = []
     for i in content:
         content_list.append(i.text)
